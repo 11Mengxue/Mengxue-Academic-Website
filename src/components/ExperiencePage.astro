@@ -1,0 +1,13 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import type { Locale } from '../lib/site';
+interface Props { locale: Locale }
+const { locale } = Astro.props; const zh=locale==='zh';
+const collection = (await getCollection('experience',({data})=>data.locale===locale))[0];
+if(!collection) throw new Error(`Missing ${locale} experience`);
+---
+<BaseLayout title={`${zh?'经历':'Experience'} | Mengxue Yao`} description={zh?'姚梦雪的教育、研究、教学与荣誉经历。':'Education, research, teaching and recognition for Mengxue Yao.'} locale={locale}>
+  <header class="page-hero"><div class="shell"><div class="breadcrumb">{zh?'首页 / 经历':'Home / Experience'}</div><p class="eyebrow">{zh?'研究轨迹':'Research trajectory'}</p><h1>{zh?'经历':'Experience'}</h1><p>{zh?'跨越风景园林、建筑学、环境建模与高等教育的研究轨迹。':'A trajectory across landscape architecture, architecture, environmental modelling and higher education.'}</p></div></header>
+  <section class="section"><div class="shell"><div class="timeline">{collection.data.items.map(item=><article class="timeline-item"><time>{item.period}</time><div><div class="section-kicker">{item.category}</div><h3>{item.title}</h3><strong>{item.organization}</strong><p>{item.description}</p></div></article>)}</div></div></section>
+</BaseLayout>

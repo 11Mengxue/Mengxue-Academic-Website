@@ -1,0 +1,39 @@
+---
+interface Props { locale?: 'en' | 'zh'; mode?: 'ba' | 'phd'; }
+const { locale = 'en', mode = 'ba' } = Astro.props;
+const isBa = mode === 'ba';
+const labels = isBa
+  ? (locale === 'zh'
+      ? ['空气质量', '社会脆弱性', '城市环境', '治理能力', '健康不平等', '城市韧性']
+      : ['Air quality', 'Social vulnerability', 'Urban environment', 'Governance', 'Health inequality', 'Urban resilience'])
+  : (locale === 'zh'
+      ? ['城市形态', '植被结构', '环境数据', '空间建模', '空气质量', '规划决策']
+      : ['Urban form', 'Vegetation', 'Environmental data', 'Spatial models', 'Air quality', 'Planning insight']);
+const ariaLabel = isBa
+  ? (locale === 'zh' ? '从空气质量、社会脆弱性、城市环境和治理理解健康不平等与城市韧性' : 'Research framework connecting air quality, social vulnerability, urban environment and governance with health inequality and urban resilience')
+  : (locale === 'zh' ? '从城市数据到规划洞察的研究流程' : 'Research flow from urban data to planning insight');
+---
+<figure class="research-diagram" aria-labelledby="diagram-caption">
+  <svg viewBox="0 0 760 430" role="img" aria-label={ariaLabel}>
+    <defs>
+      <linearGradient id="glow" x1="0" x2="1"><stop stop-color="#45c5b2"/><stop offset="1" stop-color="#78aee8"/></linearGradient>
+      <filter id="blur"><feGaussianBlur stdDeviation="16"/></filter>
+    </defs>
+    <circle cx="380" cy="215" r="145" fill="none" stroke="#dcece6" stroke-opacity=".12" stroke-dasharray="3 12"/>
+    <circle cx="380" cy="215" r="92" fill="#45c5b2" fill-opacity=".07" stroke="url(#glow)"/>
+    <circle cx="380" cy="215" r="62" fill="#45c5b2" fill-opacity=".08" filter="url(#blur)"/>
+    <g fill="none" stroke="#8ccfc4" stroke-opacity=".35">
+      <path d="M157 104 C255 104 264 185 320 205"/><path d="M157 326 C250 326 270 250 320 225"/>
+      <path d="M603 104 C510 104 496 185 440 205"/><path d="M603 326 C515 326 490 255 440 225"/>
+    </g>
+    <g font-family="Inter, sans-serif" text-anchor="middle">
+      <text x="380" y="207" fill="#f4f7f2" font-size="13" letter-spacing="2">{isBa ? (locale === 'zh' ? '健康' : 'HEALTH') : 'PM2.5'}</text>
+      <text x="380" y="231" fill="#9cded3" font-size="12">{labels[4]}</text>
+      <g fill="#f4f7f2" font-size="13"><text x="128" y="93">{labels[0]}</text><text x="128" y="315">{labels[1]}</text><text x="632" y="93">{labels[2]}</text><text x="632" y="315">{labels[3]}</text></g>
+      <text x="380" y="399" fill="#78aee8" font-size="13" letter-spacing="1">{labels[5]}</text>
+    </g>
+    <g fill="#0e2e2a" stroke="#45c5b2"><circle cx="128" cy="104" r="10"/><circle cx="128" cy="326" r="10"/><circle cx="632" cy="104" r="10"/><circle cx="632" cy="326" r="10"/></g>
+    <path d="M380 307v65" stroke="url(#glow)"/><path d="m374 365 6 9 6-9" fill="none" stroke="#78aee8"/>
+  </svg>
+  <figcaption id="diagram-caption">{isBa ? (locale === 'zh' ? '以多维、交叉性框架识别谁受影响、影响发生在哪里，以及为何产生不平等。' : 'A multidimensional, intersectional framework for understanding who is affected, where and why.') : (locale === 'zh' ? '将多源城市数据连接至可执行的规划洞察。' : 'Connecting multi-source urban data with actionable planning insight.')}</figcaption>
+</figure>

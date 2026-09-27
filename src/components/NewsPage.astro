@@ -1,0 +1,12 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import type { Locale } from '../lib/site';
+interface Props { locale: Locale }
+const {locale}=Astro.props; const zh=locale==='zh';
+const items=(await getCollection('news',({data})=>data.locale===locale&&!data.draft)).sort((a,b)=>b.data.date.valueOf()-a.data.date.valueOf());
+---
+<BaseLayout title={`${zh?'动态':'News'} | Mengxue Yao`} description={zh?'研究、教学与学术发展动态。':'Research, teaching and academic development notes.'} locale={locale}>
+  <header class="page-hero"><div class="shell"><div class="breadcrumb">{zh?'首页 / 动态':'Home / News'}</div><p class="eyebrow">{zh?'最新进展':'Latest notes'}</p><h1>{zh?'动态':'News'}</h1><p>{zh?'研究、教学与学术发展中的重要节点。':'Selected milestones across research, teaching and academic development.'}</p></div></header>
+  <section class="section"><div class="shell"><div class="news-grid">{items.map(item=><article class="news-card"><time datetime={item.data.date.toISOString()}>{item.data.date.toLocaleDateString(zh?'zh-CN':'en-GB',{year:'numeric',month:'long',day:'numeric'})}</time><h3><a href={`${zh?'/zh':''}/post/${item.data.routeSlug}/`}>{item.data.title}</a></h3><p>{item.data.description}</p><a href={`${zh?'/zh':''}/post/${item.data.routeSlug}/`}>{zh?'阅读 →':'Read →'}</a></article>)}</div></div></section>
+</BaseLayout>

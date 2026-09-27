@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import type { Locale } from '../lib/site';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const zh = locale === 'zh';
+const base = zh ? '/zh' : '';
+const projects = zh ? [
+  {
+    period: '2026–至今',
+    title: '空气污染健康不平等制图：英格兰城市综合评估框架',
+    description: '英国国家学术院博士后项目，整合空气质量、社会经济、健康、城市形态与治理数据，识别不同人群和地区之间的环境健康不平等。',
+    href: `${base}/research/ba-postdoctoral/`
+  },
+  {
+    period: '2021–2025',
+    title: '真实城市环境中城市植被对环境 PM₂.₅ 浓度的影响',
+    description: '博士研究项目，通过遥感、街景影像、空气质量监测与空间建模，分析城市植被和城市形态如何影响 PM₂.₅ 的时空分布。',
+    href: `${base}/research/phd-overview/`
+  }
+] : [
+  {
+    period: '2026–present',
+    title: 'Mapping Air Pollution Health Inequalities: An Integrated Assessment Framework for Urban England',
+    description: 'A British Academy Postdoctoral Fellowship integrating air quality, socioeconomic, health, urban-form and governance data to identify environmental health inequalities across people and places.',
+    href: `${base}/research/ba-postdoctoral/`
+  },
+  {
+    period: '2021–2025',
+    title: 'Effects of Urban Vegetation on Ambient PM₂.₅ Concentrations in Real Urban Environment',
+    description: 'A PhD project combining remote sensing, street-view imagery, air-quality monitoring and spatial modelling to understand how vegetation and urban form shape the distribution of PM₂.₅.',
+    href: `${base}/research/phd-overview/`
+  }
+];
+---
+<BaseLayout title={`${zh?'研究项目':'Research Projects'} | Mengxue Yao`} description={zh?'姚梦雪的博士后与博士研究项目。':'Postdoctoral and doctoral research projects by Mengxue Yao.'} locale={locale}>
+  <header class="page-hero"><div class="shell"><div class="breadcrumb">{zh?'首页 / 研究':'Home / Research'}</div><p class="eyebrow">{zh?'研究项目':'Research projects'}</p><h1>{zh?'研究项目':'Research Projects'}</h1><p>{zh?'以下为当前及已完成的主要研究项目。点击项目可查看研究问题、数据、方法与预期贡献。':'Current and completed research projects. Select a project to explore its questions, evidence, methods and contribution.'}</p></div></header>
+  <section class="section compact"><div class="shell research-index">
+    {projects.map(project => <a class="research-summary" href={project.href}>
+      <time class="research-period">{project.period}</time>
+      <div><h2>{project.title}</h2><p>{project.description}</p></div>
+      <span class="research-arrow" aria-hidden="true">↗</span>
+    </a>)}
+  </div></section>
+</BaseLayout>

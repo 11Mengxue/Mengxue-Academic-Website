@@ -1,0 +1,125 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import type { Locale } from '../lib/site';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const zh = locale === 'zh';
+
+const copy = zh ? {
+  title: '教学 | Mengxue Yao',
+  description: '姚梦雪在博士生培养、城市设计、空间分析与国际课程方面的教学活动。',
+  breadcrumb: '首页 / 教学',
+  eyebrow: '教学活动',
+  heading: '教学',
+  lede: '教学活动涵盖博士生培养、城市设计与规划、空间分析与 GIS，以及国际课程与教育拓展。',
+  introKicker: '教学概览',
+  introTitle: '连接研究方法、实践技能与城市议题',
+  intro: '教学以清晰的方法讲解和应用导向为核心，帮助学生将空间数据、设计思维与城市研究问题联系起来。',
+  activities: [
+    {
+      period: '2022–2025',
+      title: '博士生培养',
+      organization: '谢菲尔德大学',
+      description: '为博士生设计并讲授专题课程，支持新生完成确认评审，并介绍 Urban MorphoMetrics 等城市形态分析方法。',
+      tags: ['博士培养', '研究方法', '学术发展']
+    },
+    {
+      period: '2022–2025',
+      title: '城市设计与规划教学',
+      organization: '谢菲尔德大学',
+      description: '参与本科与研究生层面的城市设计、场所营造、规划工作室和综合项目教学，包括研讨课、课堂讨论、软件指导与作业评阅。',
+      tags: ['城市设计', '规划实践', '工作室教学']
+    },
+    {
+      period: '2022–2024',
+      title: '空间分析与 GIS',
+      organization: '谢菲尔德大学',
+      description: '支持空间分析、可持续城市及建成环境 GIS 教学，涵盖 ArcMap、QGIS 与 ArcGIS Pro，并参与教学手册编写和空间数据可视化指导。',
+      tags: ['GIS', '空间数据', '数据可视化']
+    },
+    {
+      period: '2024–2025',
+      title: '国际课程与教育拓展',
+      organization: '成都大学及教育拓展项目',
+      description: '独立设计并以英语讲授智慧与可持续城市相关课程，同时参与扩大教育参与度的校园活动及一对一学习支持。',
+      tags: ['智慧城市', '英文授课', '教育拓展']
+    }
+  ]
+} : {
+  title: 'Teaching | Mengxue Yao',
+  description: 'Teaching activities by Mengxue Yao across doctoral training, urban design, spatial analysis and international education.',
+  breadcrumb: 'Home / Teaching',
+  eyebrow: 'Teaching activities',
+  heading: 'Teaching',
+  lede: 'Teaching across doctoral training, urban design and planning, spatial analysis and GIS, and international education and outreach.',
+  introKicker: 'Teaching overview',
+  introTitle: 'Connecting research methods, practical skills and urban questions',
+  intro: 'The teaching approach emphasises clear methods and applied learning, helping students connect spatial data, design thinking and urban research questions.',
+  activities: [
+    {
+      period: '2022–2025',
+      title: 'Doctoral research training',
+      organization: 'University of Sheffield',
+      description: 'Designed and delivered specialist sessions for doctoral researchers, supporting new PhD students through confirmation review and introducing urban-form methods including Urban MorphoMetrics.',
+      tags: ['Doctoral training', 'Research methods', 'Academic development']
+    },
+    {
+      period: '2022–2025',
+      title: 'Urban design and planning',
+      organization: 'University of Sheffield',
+      description: 'Contributed to undergraduate and postgraduate teaching in urban design, place-making, planning studios and integrated projects through seminars, discussions, software guidance and assessment.',
+      tags: ['Urban design', 'Planning practice', 'Studio teaching']
+    },
+    {
+      period: '2022–2024',
+      title: 'Spatial analysis and GIS',
+      organization: 'University of Sheffield',
+      description: 'Supported teaching in spatial analysis, sustainable cities and GIS for the built environment, including ArcMap, QGIS and ArcGIS Pro, workshop materials and applied data visualisation.',
+      tags: ['GIS', 'Spatial data', 'Data visualisation']
+    },
+    {
+      period: '2024–2025',
+      title: 'International teaching and outreach',
+      organization: 'Chengdu University and outreach programmes',
+      description: 'Designed and delivered English-medium teaching on smart and sustainable cities, alongside widening-participation activities and one-to-one student support.',
+      tags: ['Smart cities', 'English-medium teaching', 'Outreach']
+    }
+  ]
+};
+---
+<BaseLayout title={copy.title} description={copy.description} locale={locale}>
+  <header class="page-hero teaching-hero">
+    <div class="shell">
+      <div class="breadcrumb">{copy.breadcrumb}</div>
+      <p class="eyebrow">{copy.eyebrow}</p>
+      <h1>{copy.heading}</h1>
+      <p>{copy.lede}</p>
+    </div>
+  </header>
+  <section class="section">
+    <div class="shell">
+      <div class="section-head section-head-wide teaching-intro">
+        <div>
+          <p class="section-kicker">{copy.introKicker}</p>
+          <h2>{copy.introTitle}</h2>
+        </div>
+        <p class="section-intro">{copy.intro}</p>
+      </div>
+      <div class="teaching-grid">
+        {copy.activities.map((activity, index) =>
+          <article class="teaching-card">
+            <div class="teaching-card-top">
+              <span class="teaching-number">{String(index + 1).padStart(2, '0')}</span>
+              <time>{activity.period}</time>
+            </div>
+            <h3>{activity.title}</h3>
+            <strong>{activity.organization}</strong>
+            <p>{activity.description}</p>
+            <div class="teaching-tags">{activity.tags.map(tag => <span>{tag}</span>)}</div>
+          </article>
+        )}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

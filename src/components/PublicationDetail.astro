@@ -1,0 +1,18 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import type { Locale } from '../lib/site';
+interface Props { entry: CollectionEntry<'publications'>; locale: Locale }
+const {entry,locale}=Astro.props; const zh=locale==='zh'; const {Content}=await render(entry);
+const schema={
+  '@context':'https://schema.org','@type':'ScholarlyArticle',headline:entry.data.title,datePublished:entry.data.date.toISOString(),
+  author:entry.data.authors.map(name=>({'@type':'Person',name})),isPartOf:{'@type':'Periodical',name:entry.data.venue},
+  sameAs:entry.data.doi
+};
+---
+<BaseLayout title={`${entry.data.title} | Mengxue Yao`} description={entry.data.description} locale={locale} image={entry.data.seoImage} type="article">
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  <header class="page-hero"><div class="shell"><div class="breadcrumb"><a href={`${zh?'/zh':''}/publications/`}>{zh?'研究成果':'Publications'}</a> / {entry.data.year}</div><p class="eyebrow">{entry.data.type} · {entry.data.venue}</p><h1>{entry.data.title}</h1><p>{entry.data.authors.join(' · ')}</p>{entry.data.contribution&&<p class="contribution-note">{entry.data.contribution}</p>}<div class="button-row">{entry.data.doi&&<a class="button" href={entry.data.doi}>DOI ↗</a>}{entry.data.pdf&&<a class="button secondary" href={entry.data.pdf}>PDF ↓</a>}{entry.data.code&&<a class="button secondary" href={entry.data.code}>Code ↗</a>}{entry.data.citation&&<a class="button secondary" href={entry.data.citation}>Cite ↓</a>}</div></div></header>
+  {entry.data.seoImage&&<div class="shell publication-cover"><img src={entry.data.seoImage} alt={`${entry.data.title} — ${zh?'论文首页':'first page'}`}/></div>}
+  <div class="shell prose-shell"><aside class="prose-nav"><a href={`${zh?'/zh':''}/publications/`}>← {zh?'全部成果':'All publications'}</a><a href={`${zh?'/zh':''}/research/phd-overview/`}>{zh?'相关研究':'Related research'} →</a></aside><article class="prose publication-abstract"><h2>{zh?'摘要':'Abstract'}</h2><Content /></article></div>
+</BaseLayout>

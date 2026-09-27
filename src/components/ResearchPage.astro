@@ -1,0 +1,16 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import type { Locale } from '../lib/site';
+interface Props { locale: Locale; translationKey?: 'phd-overview' | 'ba-postdoctoral' }
+const { locale, translationKey = 'phd-overview' } = Astro.props;
+const item = (await getCollection('research', ({data}) => data.locale === locale && data.translationKey === translationKey))[0];
+if (!item) throw new Error(`Missing ${locale} ${translationKey} research overview`);
+const { Content, headings } = await render(item);
+const zh = locale === 'zh';
+const isBa = translationKey === 'ba-postdoctoral';
+---
+<BaseLayout title={`${item.data.title} | Mengxue Yao`} description={item.data.description} locale={locale} type="article">
+  <header class="page-hero research-detail-hero"><div class="shell"><div class="breadcrumb"><a href={zh?'/zh/research/':'/research/'}>{zh?'研究':'Research'}</a> / {isBa ? (zh?'博士后项目':'Postdoctoral fellowship') : (zh?'博士研究项目':'PhD project')}</div><p class="eyebrow">{isBa ? (zh?'英国国家学术院博士后项目':'British Academy Postdoctoral Fellowship') : (zh?'博士研究项目':'PhD research project')}</p><h1>{item.data.title}</h1><p>{item.data.description}</p><div class="tag-row">{item.data.methods.slice(0,4).map(x=><span class="tag">{x}</span>)}</div></div></header>
+  <div class="shell prose-shell"><aside class="prose-nav" aria-label={zh?'目录':'On this page'}>{headings.filter(h=>h.depth===2).map(h=><a href={`#${h.slug}`}>{h.text}</a>)}</aside><article class="prose"><Content /></article></div>
+</BaseLayout>

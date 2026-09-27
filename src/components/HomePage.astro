@@ -1,0 +1,70 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { profile, localizedPath, type Locale } from '../lib/site';
+
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const zh = locale === 'zh';
+const publications = (await getCollection('publications', ({ data }) => data.locale === locale && data.featured && !data.draft)).sort((a,b) => b.data.date.valueOf()-a.data.date.valueOf()).slice(0,2);
+const news = (await getCollection('news', ({ data }) => data.locale === locale && !data.draft)).sort((a,b) => b.data.date.valueOf()-a.data.date.valueOf()).slice(0,3);
+const copy = zh ? {
+  title:'姚梦雪｜个人学术网站', description:'姚梦雪的研究聚焦城市韧性、空气质量、公共健康与健康不平等。', eyebrow:'个人学术网站 · 研究 · 成果 · 经历',
+  heroA:'姚梦雪',heroB:'Mengxue Yao',lede:'我的研究关注城市环境如何影响空气质量、公共健康与健康不平等，并结合空间数据、环境建模和城市形态分析，为建设更健康、更公平、更具韧性的城市提供证据。',cv:'下载简历',contactLabel:'联系方式',emailLabel:'邮箱',linkedinLabel:'LinkedIn',scholarLabel:'Google Scholar',orcidLabel:'ORCID',
+  metrics:['城市韧性','空气质量','公共健康','健康不平等'],
+  focusKicker:'当前研究议程',focusTitle:'面向更健康、更公平、更具韧性的城市',focusIntro:'我的 British Academy 博士后项目将高分辨率空气质量数据与社会经济、健康、城市形态及治理信息连接起来，识别污染健康影响在不同人群与地区之间的不平等分布。',
+  focuses:[['01','空气污染暴露','绘制 PM₂.₅、PM₁₀、O₃ 与 NO₂ 的高分辨率空间分布，识别暴露热点。'],['02','脆弱性与健康不平等','结合人口社会经济特征与健康数据，分析哪些人群受影响最深，以及不平等如何交叉形成。'],['03','治理与城市韧性','从空气质量、脆弱性和治理三个维度构建指标，为更具针对性和公平性的城市干预提供依据。']],
+  pubTitle:'代表性成果',allPubs:'查看全部成果',
+  newsKicker:'最新动态',newsTitle:'研究、资助与学术动态',allNews:'查看全部动态',
+  ctaTitle:'让研究走向更健康、更公平、更具韧性的城市。',ctaText:'欢迎围绕空气污染、公共健康、健康不平等、城市韧性与空间数据开展合作。',contact:'邮件联系'
+} : {
+  title:'Mengxue Yao | Academic Profile', description:'Research by Mengxue Yao on urban resilience, air quality, public health and health inequality.', eyebrow:'Academic profile · Research · Publications · Experience',
+  heroA:'Mengxue Yao',heroB:'Academic profile',lede:'Research focuses on how urban environments shape air quality, public health and health inequality. Spatial data, environmental modelling and urban-form analysis are integrated to develop evidence for healthier, fairer and more resilient cities.',cv:'Download CV',contactLabel:'Contact',emailLabel:'Email',linkedinLabel:'LinkedIn',scholarLabel:'Google Scholar',orcidLabel:'ORCID',
+  metrics:['Urban resilience','Air quality','Public health','Health inequality'],
+  focusKicker:'Current research agenda',focusTitle:'Towards healthier, fairer and more resilient cities',focusIntro:'My British Academy Postdoctoral Fellowship connects high-resolution air-quality evidence with socioeconomic, health, urban-form and governance data to reveal how environmental health inequalities are distributed across people and places.',
+  focuses:[['01','Air-pollution exposure','Mapping high-resolution patterns of PM₂.₅, PM₁₀, O₃ and NO₂ to identify where exposure is concentrated.'],['02','Vulnerability & health inequality','Connecting socioeconomic and health data to understand who is most affected and how disadvantages intersect.'],['03','Governance & urban resilience','Building indicators across air quality, vulnerability and governance to support targeted and equitable urban interventions.']],
+  pubTitle:'Selected Publications',allPubs:'View all publications',
+  newsKicker:'Latest updates',newsTitle:'Research, funding and academic updates',allNews:'View all news',
+  ctaTitle:'Towards healthier, fairer and more resilient cities.',ctaText:'I welcome conversations about air pollution, public health, health inequality, urban resilience and spatial data.',contact:'Start a conversation'
+};
+const pubImages: Record<string,string> = { 'urban-heat-air-pollution':'/media/urban-heat-first-page.jpg', 'journal-article':'/media/systematic-review-first-page.png', 'conference-paper':'/media/urban-vegetation.webp' };
+---
+<BaseLayout title={copy.title} description={copy.description} locale={locale}>
+  <section class="hero">
+    <div class="shell hero-grid">
+      <div>
+        <p class="eyebrow">{copy.eyebrow}</p>
+        <h1>{copy.heroA}<span>{copy.heroB}</span></h1>
+        {!zh && <p class="name-pronunciation"><span>Pronunciation</span><span class="phonetic-note">“MUNG-shweh YOW”</span></p>}
+        <p class="hero-lede">{copy.lede}</p>
+        <p class="hero-contact"><span>{copy.contactLabel}</span><a href={`mailto:${profile.email}`}>{copy.emailLabel}: {profile.email}</a><a href={profile.linkedin}>{copy.linkedinLabel} ↗</a><a href={profile.scholar}>{copy.scholarLabel} ↗</a><a href={profile.orcid}>{copy.orcidLabel} ↗</a></p>
+        <div class="hero-actions">
+          <a class="button secondary" href={profile.cv}>{copy.cv} <span aria-hidden="true">↓</span></a>
+        </div>
+      </div>
+      <aside class="profile-card" aria-label={zh?'个人资料':'Profile'}>
+        <div class="portrait-wrap"><img src="/media/mengxue-yao-portrait.jpg" width="800" height="1000" alt={zh?'姚梦雪个人照片':'Portrait of Mengxue Yao'} decoding="async" fetchpriority="high" /></div>
+        <div class="profile-meta"><div><strong>Mengxue Yao</strong><span>{zh?'英国国家学术院博士后研究员':'British Academy Postdoctoral Fellow'}</span></div><span class="profile-code">SHEFFIELD · UK</span></div>
+      </aside>
+    </div>
+  </section>
+  <div class="metrics">{copy.metrics.map((item)=><div class="metric"><span>{item}</span></div>)}</div>
+  <section class="section">
+    <div class="shell">
+      <div class="section-head section-head-wide"><div><p class="section-kicker">{copy.focusKicker}</p><h2>{copy.focusTitle}</h2></div><p class="section-intro">{copy.focusIntro}</p></div>
+      <div class="focus-grid">{copy.focuses.map(([n,t,d])=><article class="focus-card"><span class="focus-number">{n}</span><h3>{t}</h3><p>{d}</p></article>)}</div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="shell">
+      <div class="section-head section-head-inline"><h2>{copy.pubTitle}</h2><a href={localizedPath('/publications/',locale)}>{copy.allPubs} →</a></div>
+      <div class="publication-grid">
+        {publications.map((pub)=><article class="publication-card"><div class="publication-image"><img src={pubImages[pub.data.routeSlug] || '/media/og-card.svg'} alt="" loading="lazy" decoding="async" /></div><div class="publication-body"><div class="publication-meta">{pub.data.year} · {pub.data.venue}</div><h3><a href={localizedPath(`/publication/${pub.data.routeSlug}/`,locale)}>{pub.data.title}</a></h3><p class="publication-authors">{pub.data.authors.join(' · ')}</p><div class="publication-links">{pub.data.doi&&<a href={pub.data.doi}>DOI</a>}{pub.data.pdf&&<a href={pub.data.pdf}>PDF</a>}{pub.data.code&&<a href={pub.data.code}>Code</a>}</div></div></article>)}
+      </div>
+    </div>
+  </section>
+  <section class="section compact" style="background:var(--paper-2)">
+    <div class="shell"><div class="section-head section-head-inline"><div><p class="section-kicker">{copy.newsKicker}</p><h2>{copy.newsTitle}</h2></div><a href={localizedPath('/news/',locale)}>{copy.allNews} →</a></div><div class="news-grid">{news.map((item)=><article class="news-card"><time datetime={item.data.date.toISOString()}>{item.data.date.toLocaleDateString(zh?'zh-CN':'en-GB',{year:'numeric',month:'short',day:'numeric'})}</time><h3><a href={localizedPath(`/post/${item.data.routeSlug}/`,locale)}>{item.data.title}</a></h3><p>{item.data.description}</p></article>)}</div></div>
+  </section>
+  <section class="cta"><div class="shell cta-grid"><div><p class="section-kicker">COLLABORATE</p><h2>{copy.ctaTitle}</h2><p>{copy.ctaText}</p></div><a class="button" href={`mailto:${profile.email}`}>{copy.contact} ↗</a></div></section>
+</BaseLayout>

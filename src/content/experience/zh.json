@@ -1,0 +1,13 @@
+{
+  "locale": "zh",
+  "translationKey": "experience",
+  "items": [
+    {"period":"2026 年 – 至今","title":"英国国家学术院博士后研究员","organization":"谢菲尔德大学","description":"主持英国城市空气污染健康不平等制图与综合评估研究。","category":"research"},
+    {"period":"2025 年 10 月 – 至今","title":"研究助理","organization":"巴斯大学","description":"参与 AIRWISE 项目，并与马尼拉团队围绕城市形态、空气质量与城市韧性开展合作。","category":"research"},
+    {"period":"2021 年 10 月 – 2025 年 9 月","title":"建筑学博士","organization":"谢菲尔德大学","description":"研究城市形态、植被与空气质量建模的交叉问题。","category":"education"},
+    {"period":"2016 年 9 月 – 2019 年 1 月","title":"风景园林硕士","organization":"哈尔滨工业大学","description":"系统学习风景园林与环境设计。","category":"education"},
+    {"period":"2012 年 9 月 – 2016 年 6 月","title":"风景园林学士","organization":"东北农业大学","description":"完成风景园林专业基础训练。","category":"education"},
+    {"period":"2025 年 5 月获授","title":"英国高等教育学会会士（FHEA）","organization":"Advance HE","description":"对高等教育教学和学习支持实践的专业认可。","category":"teaching"},
+    {"period":"2024 年 7 月获授","title":"研究生出版奖学金","organization":"谢菲尔德大学","description":"支持博士研究成果发表；姚梦雪是建筑与景观学院首位获奖者。","category":"award"}
+  ]
+}

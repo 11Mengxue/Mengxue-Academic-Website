@@ -1,0 +1,17 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import type { Locale } from '../lib/site';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const zh = locale === 'zh';
+const items = (await getCollection('publications', ({data})=>data.locale===locale&&!data.draft)).sort((a,b)=>b.data.year-a.data.year);
+const path = (slug:string)=>`${zh?'/zh':''}/publication/${slug}/`;
+---
+<BaseLayout title={`${zh?'研究成果':'Publications'} | Mengxue Yao`} description={zh?'姚梦雪关于城市形态、植被与空气质量的研究成果。':'Research outputs on urban form, vegetation and air quality by Mengxue Yao.'} locale={locale}>
+  <header class="page-hero"><div class="shell"><div class="breadcrumb">{zh?'首页 / 研究成果':'Home / Publications'}</div><p class="eyebrow">{zh?'成果档案':'Research archive'}</p><h1>{zh?'研究成果':'Publications'}</h1><p>{zh?'围绕真实城市环境中的植被、城市形态、空气质量和环境建模。':'Work on vegetation, urban form, air quality and environmental modelling in real urban environments.'}</p></div></header>
+  <section class="section"><div class="shell"><div class="filter-bar" aria-label={zh?'筛选研究成果':'Filter publications'}><button class="filter-button" data-filter="all" aria-pressed="true">{zh?'全部':'All'}</button><button class="filter-button" data-filter="journal" aria-pressed="false">{zh?'期刊':'Journal'}</button><button class="filter-button" data-filter="chapter" aria-pressed="false">{zh?'书籍章节':'Book chapter'}</button><button class="filter-button" data-filter="conference" aria-pressed="false">{zh?'会议':'Conference'}</button></div><div class="list-publications">{items.map(item=><article class="list-publication" data-type={item.data.type}><div class="year">{item.data.year}</div><div><h3><a href={path(item.data.routeSlug)}>{item.data.title}</a></h3><p>{item.data.authors.join(', ')} · <em>{item.data.venue}</em></p>{item.data.contribution&&<p class="publication-contribution">{item.data.contribution}</p>}</div><div class="pill-links">{item.data.doi&&<a href={item.data.doi}>DOI</a>}{item.data.pdf&&<a href={item.data.pdf}>PDF</a>}{item.data.code&&<a href={item.data.code}>Code</a>}{item.data.citation&&<a href={item.data.citation}>Cite</a>}</div></article>)}</div></div></section>
+  <script is:inline>
+    document.querySelectorAll('.filter-button').forEach(button=>button.addEventListener('click',()=>{const filter=button.dataset.filter;document.querySelectorAll('.filter-button').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));document.querySelectorAll('.list-publication').forEach(item=>item.hidden=filter!=='all'&&item.dataset.type!==filter)}));
+  </script>
+</BaseLayout>

@@ -1,0 +1,13 @@
+{
+  "locale": "en",
+  "translationKey": "experience",
+  "items": [
+    {"period":"2026 – Present","title":"British Academy Postdoctoral Fellow","organization":"University of Sheffield","description":"Leading a fellowship project on mapping air-pollution health inequalities across urban England.","category":"research"},
+    {"period":"Oct 2025 – Present","title":"Research Associate","organization":"University of Bath","description":"Contributed to AIRWISE—Air Quality Improvement and Resilience through Urban Morphology and Environment—in collaboration with the Manila team.","category":"research"},
+    {"period":"Oct 2021 – Sep 2025","title":"PhD in Architecture","organization":"University of Sheffield","description":"Doctoral research at the intersection of urban morphology, vegetation and air-quality modelling.","category":"education"},
+    {"period":"Sep 2016 – Jan 2019","title":"MEng in Landscape Architecture","organization":"Harbin Institute of Technology","description":"Advanced study in landscape architecture and environmental design.","category":"education"},
+    {"period":"Sep 2012 – Jun 2016","title":"BEng in Landscape Architecture","organization":"Northeast Agricultural University","description":"Foundational training in landscape architecture.","category":"education"},
+    {"period":"Awarded May 2025","title":"Fellow of the Higher Education Academy","organization":"Advance HE","description":"Recognition of effective teaching and learning support in higher education.","category":"teaching"},
+    {"period":"Awarded Jul 2024","title":"PGR Publication Scholarship","organization":"University of Sheffield","description":"Award supporting doctoral research publication; first recipient from the School of Architecture and Landscape.","category":"award"}
+  ]
+}

@@ -1,0 +1,7 @@
+---
+import { getCollection } from 'astro:content';
+import PublicationDetail from '../../components/PublicationDetail.astro';
+export async function getStaticPaths(){const items=await getCollection('publications',({data})=>data.locale==='en'&&!data.draft);return items.map(entry=>({params:{slug:entry.data.routeSlug},props:{entry}}))}
+const {entry}=Astro.props;
+---
+<PublicationDetail entry={entry} locale="en" />

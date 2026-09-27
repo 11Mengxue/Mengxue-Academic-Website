@@ -1,0 +1,8 @@
+---
+import {render,type CollectionEntry} from 'astro:content';import BaseLayout from '../layouts/BaseLayout.astro';import type {Locale} from '../lib/site';
+interface Props{entry:CollectionEntry<'news'>;locale:Locale} const {entry,locale}=Astro.props;const zh=locale==='zh';const{Content}=await render(entry);
+---
+<BaseLayout title={`${entry.data.title} | Mengxue Yao`} description={entry.data.description} locale={locale} type="article">
+  <header class="page-hero"><div class="shell"><div class="breadcrumb"><a href={`${zh?'/zh':''}/news/`}>{zh?'动态':'News'}</a> / {entry.data.category}</div><p class="eyebrow">{entry.data.date.toLocaleDateString(zh?'zh-CN':'en-GB',{year:'numeric',month:'long',day:'numeric'})}</p><h1>{entry.data.title}</h1><p>{entry.data.description}</p></div></header>
+  <div class="shell prose-shell"><aside class="prose-nav"><a href={`${zh?'/zh':''}/news/`}>← {zh?'全部动态':'All news'}</a></aside><article class="prose"><Content />{entry.data.externalUrl&&<a class="external-project-card" href={entry.data.externalUrl}><span>{zh?'项目网站':'Project website'}</span><strong>{entry.data.externalLabel || entry.data.externalUrl}</strong><small>{new URL(entry.data.externalUrl).hostname} ↗</small></a>}</article></div>
+</BaseLayout>

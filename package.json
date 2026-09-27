@@ -1,0 +1,27 @@
+{
+  "name": "mengxue-academic-website",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.19.0",
+  "scripts": {
+    "dev": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro dev",
+    "build": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro check && cross-env ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "preview": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro preview",
+    "check": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro check",
+    "check:build": "node scripts/check-build.mjs",
+    "validate:translations": "node scripts/validate-translations.mjs",
+    "validate": "pnpm validate:translations && pnpm build && pnpm check:build"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "8.0.2",
+    "@astrojs/sitemap": "3.7.4",
+    "astro": "7.3.5"
+  },
+  "devDependencies": {
+    "@astrojs/check": "latest",
+    "cross-env": "^10.1.0",
+    "lighthouse": "^13.5.0",
+    "typescript": "6.0.3"
+  }
+}

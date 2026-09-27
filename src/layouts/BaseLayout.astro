@@ -1,0 +1,101 @@
+---
+import '../styles/global.css';
+import { profile, ui, alternatePath, type Locale } from '../lib/site';
+
+interface Props {
+  title: string;
+  description: string;
+  locale?: Locale;
+  image?: string;
+  type?: 'website' | 'article';
+}
+
+const {
+  title,
+  description,
+  locale = 'en',
+  image = '/media/og-card.svg',
+  type = 'website'
+} = Astro.props;
+const copy = ui[locale];
+const nav = copy.nav as [string, string][];
+const pathname = Astro.url.pathname;
+const canonical = new URL(pathname, Astro.site);
+const alternate = new URL(alternatePath(pathname, locale), Astro.site);
+const defaultPath = pathname === '/zh/404/' ? '/404.html' : (pathname.replace(/^\/zh/, '') || '/');
+const language = locale === 'zh' ? 'zh-CN' : 'en-GB';
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: profile.name,
+  url: Astro.site,
+  email: `mailto:${profile.email}`,
+  affiliation: { '@type': 'Organization', name: profile.institution },
+  sameAs: [profile.github, profile.linkedin],
+  knowsAbout: ['Urban air quality', 'Urban form', 'Environmental modelling', 'Spatial data science', 'Machine learning']
+};
+---
+<!doctype html>
+<html lang={language}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#071a17" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang={locale === 'en' ? 'zh-CN' : 'en-GB'} href={alternate} />
+    <link rel="alternate" hreflang="x-default" href={new URL(defaultPath, Astro.site)} />
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(image, Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>{title}</title>
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{copy.skip}</a>
+    <header class="site-header">
+      <div class="shell header-inner">
+        <a class="brand" href={locale === 'zh' ? '/zh/' : '/'}>
+          <span class="brand-mark" aria-hidden="true">MY</span>
+          <span><strong>{profile.name}</strong><small>{copy.role}</small></span>
+        </a>
+        <nav aria-label="Primary navigation">
+          {nav.map(([label, href]) => <a href={href}>{label}</a>)}
+        </nav>
+        <a class="language-switch" href={alternatePath(pathname, locale)} hreflang={locale === 'en' ? 'zh-CN' : 'en-GB'}>{copy.localeName}</a>
+        <button class="menu-button" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Menu"><span></span><span></span></button>
+      </div>
+      <nav id="mobile-nav" class="mobile-nav shell" aria-label="Mobile navigation" hidden>
+        {nav.map(([label, href]) => <a href={href}>{label}</a>)}
+        <a href={alternatePath(pathname, locale)}>{copy.localeName}</a>
+      </nav>
+    </header>
+    <main id="main"><slot /></main>
+    <footer class="site-footer">
+      <div class="shell footer-grid">
+        <div><strong>{profile.name}</strong><p>{copy.footer}</p></div>
+        <div class="footer-links">
+          <a href={`mailto:${profile.email}`}>Email</a>
+          <a href={profile.github}>GitHub</a>
+          <a href={profile.linkedin}>LinkedIn</a>
+          <a href={profile.cv}>CV</a>
+        </div>
+        <p class="copyright">© {new Date().getFullYear()} Mengxue Yao</p>
+      </div>
+    </footer>
+    <script is:inline>
+      const button = document.querySelector('.menu-button');
+      const menu = document.querySelector('#mobile-nav');
+      button?.addEventListener('click', () => {
+        const open = button.getAttribute('aria-expanded') === 'true';
+        button.setAttribute('aria-expanded', String(!open));
+        if (menu) menu.hidden = open;
+      });
+    </script>
+  </body>
+</html>
